@@ -15,4 +15,8 @@ data class BluecoinsData(
     val label: String,
     val status: String,
     val split: String
-)
+) {
+    override fun toString(): String {
+        return "$type,$date,$itemOrPayee,$amount,$currency,$conversionRate,$parentCategory,$category,$accountType,$account,$notes,$label,$status,$split"
+    }
+}
