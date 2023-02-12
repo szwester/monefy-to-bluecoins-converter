@@ -1,0 +1,115 @@
+Housing
+- Rent
+- Household repairs / Maintenance
+- Insurance
+- Electricity
+- Heating
+- Furnishing
+- Supplies
+- Other
+
+Food
+- Groceries
+- Eating out
+- Snacks
+- Other
+
+Sport
+- Sport Stuff
+- Electronics
+- Clothes
+- Other
+
+Personal
+- Supplies
+- Cosmetics
+- Clothing
+- Shoes
+- Accessories
+- Other
+
+Car
+- Purchase / Loan
+- Maintenance / Service
+- Registration and other Fees
+- Parking
+- Insurance
+- Other
+
+Transportation
+- Public Transport
+- Taxi
+- Other
+
+Technology
+- Hardware
+- Software
+- Other
+
+Health & Self-care
+- Doctor / Dentist visits
+- Pharmacy
+- Other
+
+Education
+- Books
+- Courses
+- Lessons
+- Other
+
+Entertainment
+- Alcohol
+- Tobacconist's
+- Concerts
+- CDs
+- Outdoor activities
+- Going Out
+- Other
+
+Bills & Utilities
+- Internet
+- Mobile Phone
+- Subscriptions
+- Other
+
+Holiday & Travel
+- Accommodation
+- Food / Drinks
+- Travel Expenses
+- Foreign Currencies
+- Other
+
+Saving & Investment
+- Savings
+- Savings
+- Cryptocurrencies
+- Other
+
+Taxes
+- Personal Income Tax
+- VAT
+- Other
+
+Other expenses
+- Gifts
+- Donations
+- Penalties
+- Other payments
+- Other
+
+-------------------------------
+Income
+- Salary
+- Pension
+- Unemployment Compensation
+- Family Allowance
+- Other
+
+Additional Income
+- Cash Deposit
+- Own Transfers
+- Reimbursement
+- Income from Savings & Investments
+- Income from Insurances
+- Income from Crypto
+- Other

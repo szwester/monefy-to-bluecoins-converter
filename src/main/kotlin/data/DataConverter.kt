@@ -1,47 +1,55 @@
 package data
 
-import kotlin.math.abs
+import java.text.DecimalFormat
 
 class DataConverter {
 
     fun monefyDataToBluecoinsData(
         monefyData: MonefyData,
         categoryMapping: Map<String, Pair<String, String>>,
-        conversionRates: Map<String, Double>,
-        accountToAccount: Map<String, Pair<String, String>>
+        conversionRates: Map<String, String?>,
+        accountToAccount: Map<String, Pair<String, String>>,
+        descriptionMapping: Map<String, Pair<String, String>>
     ): BluecoinsData {
 
         val date = convertDate(monefyData.date)
 
         val itemOrPayee = monefyData.category
-        var amount = monefyData.amount.toDouble()
-        val type = if (amount > 0) "i" else "e"
+        var amount = convertAmount(monefyData.amount)
+        val type = if (amount.startsWith("-")) "e" else "i"
 
-        amount = abs(amount)
+        // remove leading '-'
+        amount = if (amount.startsWith("-")) amount.substring(1) else amount
 
-        val currency = monefyData.currency
 
-        val conversionRate = if (monefyData.currency != monefyData.convertedCurrency) getConversionRate(
-            monefyData.date,
-            conversionRates
-        ) else 1.00
+        val conversionRate: String = if (monefyData.currency != monefyData.convertedCurrency) {
+            conversionRates[monefyData.date] ?: throw Exception("Cannot find conversion rate for date: ${monefyData.date}")
+        } else {
+            "1.00"
+        }
+        val categories = descriptionMapping[monefyData.description] ?: getCategoryMapping(monefyData.category, categoryMapping)
 
-        val categories = getCategoryMapping(monefyData.category, categoryMapping)
-
-        val parentCategory = categories.first
-        val category = categories.second
-
-        val accountMapping = getAccountMapping(monefyData.account, accountToAccount)
-        var accountType = accountMapping.first
-        var account = accountMapping.second
+        val (accountType, account) = getAccountMapping(monefyData.account, accountToAccount)
         val notes = monefyData.description
         val label = ""
         val status = ""
         val split = ""
 
         return BluecoinsData(
-            type, date, itemOrPayee, amount.toString(), currency, conversionRate.toString(), parentCategory, category, accountType,
-            account, notes, label, status, split
+            type,
+            date,
+            itemOrPayee,
+            amount,
+            monefyData.currency,
+            conversionRate,
+            categories.first,
+            categories.second,
+            accountType,
+            account,
+            notes,
+            label,
+            status,
+            split
         )
     }
 
@@ -49,11 +57,17 @@ class DataConverter {
         account: String,
         accountToAccount: Map<String, Pair<String, String>>
     ): Pair<String, String> {
-        return accountToAccount[account]!!
+        if (!accountToAccount.containsKey(account)) {
+            throw Exception("There is not mapping for account: $account")
+        } else {
+            return accountToAccount[account]!!
+        }
     }
 
-    private fun getConversionRate(date: String, conversionRates: Map<String, Double>): Double {
-        return conversionRates[date]!!
+    fun convertAmount(originalAmount: String): String {
+        val df = DecimalFormat("0.00")
+        val replacedCharacters = originalAmount.replace(".", "").replace(",", ".")
+        return df.format(replacedCharacters.toDouble())
     }
 
     private fun convertDate(monefyDate: String): String {
@@ -68,10 +82,23 @@ class DataConverter {
         return mapping[monefyCategory]!!
     }
 
+    /**
+     * Returns all found categories in the Monefy data that should be mapped to Bluecoins categories
+     */
     fun getAllCategories(monefyData: List<MonefyData>): Set<String> {
         return monefyData.map { md -> md.category }.toSet()
     }
 
+    /**
+     * Returns all found accounts in the Monefy data that should be mapped to Bluecoins accounts
+     */
+    fun getAccounts(monefyData: List<MonefyData>): Set<String> {
+        return monefyData.map { md -> md.account }.toSet()
+    }
+
+    /**
+     * Returns all found descriptions in the Monefy data that might be mapped to Bluecoins categories
+     */
     fun getAllDescriptions(monefyData: List<MonefyData>): Set<String> {
         return monefyData.map { md -> md.description }.toSet()
     }

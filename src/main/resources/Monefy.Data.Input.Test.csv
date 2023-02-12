@@ -1,0 +1,4 @@
+date;account;category;amount;currency;converted amount;currency;description
+09/02/2023;Account1;Category1;-100;PLN;-100;PLN;Comment1
+09/02/2023;Account2;Category2;-20;EUR;-100;PLN;Comment2
+09/02/2023;Account2;Category2;-10;EUR;-40;PLN;
