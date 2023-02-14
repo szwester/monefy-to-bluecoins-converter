@@ -1,6 +1,9 @@
 package data
 
 import java.text.DecimalFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 
 class DataConverter {
 
@@ -21,35 +24,36 @@ class DataConverter {
         // remove leading '-'
         amount = if (amount.startsWith("-")) amount.substring(1) else amount
 
-
-        val conversionRate: String = if (monefyData.currency != monefyData.convertedCurrency) {
-            conversionRates[monefyData.date] ?: throw Exception("Cannot find conversion rate for date: ${monefyData.date}")
+        val conversionRate: Double
+        var doubleAmount = amount.toDouble()
+        if (monefyData.currency != "EUR") {
+            // original currency is not EUR and should be converted
+            var transactionDate = date
+            while (!conversionRates.containsKey(transactionDate.toString())) {
+                transactionDate = transactionDate.minusDays(1)
+            }
+            conversionRate = conversionRates[transactionDate.toString()]!!.toDouble()
+            doubleAmount /= conversionRate
         } else {
-            "1.00"
+            conversionRate = 1.00
         }
         val categories = descriptionMapping[monefyData.description] ?: getCategoryMapping(monefyData.category, categoryMapping)
 
         val (accountType, account) = getAccountMapping(monefyData.account, accountToAccount)
         val notes = monefyData.description
-        val label = ""
-        val status = ""
-        val split = ""
 
         return BluecoinsData(
             type,
             date,
             itemOrPayee,
-            amount,
+            doubleAmount.toString(),
             monefyData.currency,
-            conversionRate,
+            conversionRate.toString(),
             categories.first,
             categories.second,
             accountType,
             account,
             notes,
-            label,
-            status,
-            split
         )
     }
 
@@ -70,9 +74,9 @@ class DataConverter {
         return df.format(replacedCharacters.toDouble())
     }
 
-    private fun convertDate(monefyDate: String): String {
-        val split = monefyDate.split("/")
-        return split[1] + "/" + split[0] + "/" + split[2]
+    private fun convertDate(monefyDate: String): LocalDate {
+        val monefyFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        return LocalDate.parse(monefyDate, monefyFormatter)
     }
 
     private fun getCategoryMapping(

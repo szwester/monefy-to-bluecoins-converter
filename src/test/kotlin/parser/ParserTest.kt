@@ -19,8 +19,7 @@ class ParserTest {
         val expected2 = MonefyData("09/02/2023", "Account2", "Category2", "-100", "EUR", "-400", "PLN", "Comment2")
         val expected3 = MonefyData("09/02/2023", "Account2", "Category3", "-100", "PLN", "-100", "PLN", "Comment3")
 
-        val actualParsedData = parser.parseInputToMonefyData(input)
-
+        val actualParsedData = parser.parseTextInputToMonefyData(input)
         assertContentEquals(listOf(expected1, expected2, expected3), actualParsedData)
     }
 }

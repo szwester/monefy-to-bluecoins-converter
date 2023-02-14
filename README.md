@@ -1,10 +1,26 @@
-## The program is used to convert **Monefy** data to **Bluecoins** with the **Bluecoins** account currency set to EUR (might be changed).
+# Monefy to Bluecoins data converter
 
-For Monefy transactions with currencies other than EUR, e.g.: 
+The program converts **Monefy** data to **Bluecoins** with the **Bluecoins** account currency set to EUR (might be changed in the code).\
+Can handle Monefy transactions in any currency.
 
-`09/02/2023;Account;Category;-25;EUR;-100;PLN;Comment`
+Monefy transaction looks like this:
 
-the program will convert such a transaction into a transaction in PLN with the Exchange Rate to EUR appropriate for the transaction date - (Money's EUR value will be ignored).
+```date;account;category;amount;currency;converted amount;currency;description```
+
+`amount` is the actual value of the transaction, and `currency` the original currency of this transaction.
+The `converted amount` and the second `currency` are ignored by the converter and their values in Monefy transaction depend on the set 
+exchange rate and the currency set as the default Monefy account currency.
+
+* For transactions in EUR, the converter will take the amount and currency and set the exchange rate to 1.00 - because  this is
+the default currency set in Bluecoins.
+* For transactions in a currency other than EUR, the converter will convert the value of such a transaction into EUR at the exchange rate
+from the mapping (see below) and set the same currency as in the Monefy transaction.
+
+Although in the Bluecoins application it is possible to add a transaction in a currency other than the default one set for the account
+and specify the exchange rate, unfortunately the import is only possible in the default currency - hence the transaction value must always
+be converted to the currency set on the account - in this case EUR.
+
+Mapping can only handle 1 additional currency.
 
 ### Export data from Monefy
 Data from Monefy should be exported:
